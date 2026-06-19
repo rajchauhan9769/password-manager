@@ -33,14 +33,20 @@ def main_menu():
     print("Welcome to Password Manager")
     print("Loading...")
     time.sleep(0.5)
+    #===========
     # Menu Bar 
+    #===========
     print("1. Add Login")
     print("2. View Logins")
     print("3. Search Login")
     print("4. Delete Login")
+    #===================
     # Select Operations
+    #===================
     initial_input = input("Type 1, 2, 3 or 4: ")
+    #===========================
     #Option Selection Condition
+    #===========================
     if initial_input == "1":
         #Website Name
         webname = input("Enter Website's Name: ")
@@ -58,8 +64,8 @@ def main_menu():
         #========================================
         # Calling "password_handling" Function
         #=======================================
-        password = input("Enter Password: ")
-        password_handling(password, user_name, webname, weburl)
+    
+        password_handling(user_name, webname, weburl)
     elif initial_input == "2":
         view()
     
@@ -97,61 +103,86 @@ def username_handling(user_name):               #****Username Validation upcomin
 #============================================
 # Password Confirming and intiating for json
 #============================================
-def password_handling(password, user_name, webname, weburl):    #****Password Validation  upcoming.****
+def password_handling(user_name, webname, weburl):    #****Password Validation  upcoming.****
     # Confirming Password.
     # Loop for mismatched password until it matches.
-    has_upper = False
-    has_lower = False
-    has_digit = False
-    has_special = False
-    for char in password:
-        if char.isupper():
-            has_upper = True
-        elif char.islower():
-            has_lower = True
-        elif char.isdigit():
-            has_digit = True
-        elif not char.isalnum():
-            has_special = True
-        
-    if len(password)>= 8 and has_upper and has_lower and has_special and has_digit == True :
-        print("Your password is Valid.")
-        attempt = 0
-        while attempt < 3:
-            re_enter = input("Re-enter Password: ")   
-            if password == re_enter:
-                print("Password Added Successfully.")
-                time.sleep(0.5)
-                #Save Password
-                print("Do you want to save your password.")
-                # Creating "save" Function and confirming to save or not.
-                response = input("Enter [Y] - Yes or [N] - No: ")
-                save_permanent(response,password, user_name, webname, weburl)
-                break
-            print("Password mismatched please re-enter.")
-            attempt += 1
+    attempt_password = 0
+    while attempt_password < 3:
+        print("Attempt No:",attempt_password)
+        password = input("Enter Password: ")
+        has_upper = False
+        has_lower = False
+        has_digit = False
+        has_special = False
+        for char in password:
+            if char.isupper():
+                has_upper = True
+            elif char.islower():
+                has_lower = True
+            elif char.isdigit():
+                has_digit = True
+            elif not char.isalnum():
+                has_special = True
+        if len(password)>= 8 and has_upper and has_lower and has_special and has_digit == True:
+            print("Your password is Valid.")
+            attempt = 0
+            while attempt < 3:
+                re_enter = input("Re-enter Password: ")   
+                if password == re_enter:
+                    print("Password Added Successfully.")
+                    time.sleep(0.5)
+                    #Save Password
+                    print("Do you want to save your password.")
+                    # Creating "save" Function and confirming to save or not.
+                    response = input("Enter [Y] - Yes or [N] - No: ")
+                    save_permanent(response,password, user_name, webname, weburl)
+                    break
+                print("Password mismatched please re-enter.")
+                attempt += 1
+            else:
+                print("Password Confirmation failed")
+            break
         else:
-            print("Password Confirmation failed")
-        
+            print(
+"""
+==============================
+==============================
+Following things are missing:
+==============================
+==============================
+""")
+            if not len(password) >= 8:
+                print("""
+++++++++++++++++++++++
+Password is too small.
+++++++++++++++++++++++                      
+                      """)
+            if not has_upper :
+                print("""
++++++++++++++++++++++++++++
+Uppercase letter is missing
++++++++++++++++++++++++++++                      
+""") 
+            if not has_lower :
+                print("""
++++++++++++++++++
+Lower is missing.
++++++++++++++++++""")
+            if not has_digit :
+                print("""
++++++++++++++++++++++++++++
+Digits are missing.
++++++++++++++++++++++++++++""")
+            if not has_special:
+                print("""
++++++++++++++++++++++++++++++
+Special Character is missing.
++++++++++++++++++++++++++++++
+                      """)
+        attempt_password += 1
     else:
-        print(
-        """==============================
-        Following things are missing:
-        ==============================""")
-        if len(password) < 8:
-            print("Password is too small")
-        if not has_upper :
-            print("Uppercase letter is missing") 
-        if not has_lower :
-            print("Lower is missing")
-        if not has_digit :
-            print("Digits are missing")
-        if not has_special:
-            print("Special Character is missing")
-
-
-
-
+        print("Number of attempts Exceeded")
+        
 #===========================================
 #Json File Handling 
 #Permanent saving of Logins in Json.
