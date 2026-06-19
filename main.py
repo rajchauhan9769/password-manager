@@ -76,7 +76,7 @@ def main_menu():
     else:
         account_delete = input("Name the Login you want to delete: ")
         result = searching(account_delete)
-        if result == "Login Credential does not exist.":
+        if result == "Credential does not exist.":
             print(result)
         else:
             delete(result)
@@ -236,7 +236,7 @@ def searching(account_name):
         if data["Website Name"].lower() == account_name.lower():
             return(data)
     else:
-        return("Login Credential does not exist.")
+        return("Credential does not exist.")
 #===========================================
 #Block used for deleting a particular Login 
 #===========================================
@@ -246,15 +246,19 @@ def delete(account_delete):
     print(f"Are you sure you want to delete: {account_delete}")
     delete_input = input("Enter [Y] - Yes or [N] - No: ") 
     for data in datas:
+        if not delete_input == "Y" or "N":
+            print("Wrong input")
+            break
+        if delete_input == "N":
+            print("Delete process was Terminated.")
+            break
         if delete_input == "Y":
             if data == account_delete:
                 datas.remove(account_delete)
                 with open("save.json","w") as file:
                     json.dump(datas,file,indent="\t")
                 print("Data was deleted successfully.")
-        else:
-            print("Data does not exists.")
-    else:
-        print("Delete process was cancelled.")
+       
+    
 if __name__ == "__main__":
     main()
