@@ -40,10 +40,28 @@ def main_menu():
     print("2. View Logins")
     print("3. Search Login")
     print("4. Delete Login")
+    print("""
+======================
+      Main Menu
+======================
+----------------------
+    1. Add Login
+----------------------
+    2. View Logins
+----------------------
+    3. Search Login
+----------------------
+    4. Delete Login
+----------------------
+""")
     #===================
     # Select Operations
     #===================
-    initial_input = input("Type 1, 2, 3 or 4: ")
+    initial_input = input("""
+======================
+ Type 1, 2, 3 or 4: 
+======================
+""")
     #===========================
     #Option Selection Condition
     #===========================
@@ -70,10 +88,35 @@ def main_menu():
         view()
     
     elif initial_input == "3":
-        account_name =  input("Search: ")
-        searching(account_name)
-    
-    else:
+        #========================================
+        # Calling "Searching" Function
+        #=======================================
+        account_name =  input("Enter Website name: ")
+        data = searching(account_name)
+        # =======================
+        # Modifying print for UX 
+        # =======================
+        if data == "Credential does not exist.":
+            print("Wrong input")
+        else:
+            print(f"""
+============================
+        Search Results
+============================
+----------------------------                         
+Website Name : {data["Website Name"]}
+----------------------------
+Website Url  : {data["Website Url"]}
+----------------------------
+Username     : {data["Username"]}
+----------------------------
+Password     : {data["Password"]}
+----------------------------
+        """)
+    elif initial_input == "4":
+        #========================================================================================
+        #Calling "Searching" Function again to delete the data by reusing the searching function
+        #========================================================================================
         account_delete = input("Name the Login you want to delete: ")
         result = searching(account_delete)
         if result == "Credential does not exist.":
@@ -103,7 +146,7 @@ def username_handling(user_name):               #****Username Validation upcomin
 #============================================
 # Password Confirming and intiating for json
 #============================================
-def password_handling(user_name, webname, weburl):    #****Password Validation  upcoming.****
+def password_handling(user_name, webname, weburl):    
     # Confirming Password.
     # Loop for mismatched password until it matches.
     attempt_password = 0
