@@ -1,8 +1,22 @@
 import time, json
 import hashlib
+print(""" 
+██████╗  █████╗ ███████╗███████╗██╗    ██╗ ██████╗ ██████╗ ██████╗
+██╔══██╗██╔══██╗██╔════╝██╔════╝██║    ██║██╔═══██╗██╔══██╗██╔══██╗
+██████╔╝███████║███████╗███████╗██║ █╗ ██║██║   ██║██████╔╝██║  ██║
+██╔═══╝ ██╔══██║╚════██║╚════██║██║███╗██║██║   ██║██╔══██╗██║  ██║
+██║     ██║  ██║███████║███████║╚███╔███╔╝╚██████╔╝██║  ██║██████╔╝
+╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═════╝
+
+███╗   ███╗ █████╗ ███╗   ██╗ █████╗  ██████╗ ███████╗██████╗
+████╗ ████║██╔══██╗████╗  ██║██╔══██╗██╔════╝ ██╔════╝██╔══██╗
+██╔████╔██║███████║██╔██╗ ██║███████║██║  ███╗█████╗  ██████╔╝
+██║╚██╔╝██║██╔══██║██║╚██╗██║██╔══██║██║   ██║██╔══╝  ██╔══██╗
+██║ ╚═╝ ██║██║  ██║██║ ╚████║██║  ██║╚██████╔╝███████╗██║  ██║
+╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝
+""")
 def main():
     try:
-        print("Please add password to keep you Logins safe")
         with open("master.json","r") as file:
             pre_data = json.load(file)
     except(json.JSONDecodeError, FileNotFoundError):
@@ -17,7 +31,11 @@ def main():
 def master_password():
     attempt = 0
     while attempt < 3:
-        login_password = input("Enter Master Password: ")
+        login_password = input("""
+=======================
+Enter Master Password: 
+=======================
+=>""")
         hash_login = hashlib.sha256(login_password.encode()).hexdigest()
         with open("master.json","r") as file:
             data = json.load(file)
@@ -30,76 +48,75 @@ def master_password():
     else:
         print("Too many attempts.")
 def main_menu():
-    print("Welcome to Password Manager")
-    print("Loading...")
+    print("\nLoading...")
     time.sleep(0.5)
-    #===========
-    # Menu Bar 
-    #===========
-    print("1. Add Login")
-    print("2. View Logins")
-    print("3. Search Login")
-    print("4. Delete Login")
-    print("""
-======================
-      Main Menu
-======================
-----------------------
-    1. Add Login
-----------------------
-    2. View Logins
-----------------------
-    3. Search Login
-----------------------
-    4. Delete Login
-----------------------
+    print(""" 
+>> Status: ACCESS GRANTED 
+╔═════════════════════════════════════════════════════════════════════╗
+║   W E L C O M E   T O   P A S S W O R D   M A N A G E R             ║
+╚═════════════════════════════════════════════════════════════════════╝
 """)
     #===================
     # Select Operations
     #===================
-    initial_input = input("""
-======================
- Type 1, 2, 3 or 4: 
-======================
-""")
-    #===========================
-    #Option Selection Condition
-    #===========================
-    if initial_input == "1":
-        #Website Name
-        webname = input("Enter Website's Name: ")
-        website_namehandling(webname)
-        #Website Url
-        weburl = input("Enter Wesites Url: ")
-        website_urlhandling(weburl)
-        #Calling "username" Function 
-        user_name = input("Enter Username: ")
-        print(username_handling(user_name))
+    while True:
+        initial_input = input("""
+========================
+      Main Menu
+========================
+------------------------
+    1. Add Login
+------------------------
+    2. View Logins
+------------------------
+    3. Search Login
+------------------------
+    4. Delete Login
+------------------------
+    5. Exit
+------------------------
+========================
+Type 1, 2, 3, 4, or 5 : 
+========================
+=>""")
+        #===========================
+        #Option Selection Condition
+        #===========================
+        if initial_input == "1":
+            #Website Name
+            webname = input("Enter Website's Name: ")
+            website_namehandling(webname)
+            #Website Url
+            weburl = input("Enter Wesites Url: ")
+            website_urlhandling(weburl)
+            #Calling "username" Function 
+            user_name = input("Enter Username: ")
+            print(username_handling(user_name))
+            
+            time.sleep(0.5)
+            # Requirements
+            print("Password should contain atleast [1 - capital character] [1 - small character] [1 - special character] and more than [8 - characters ]")
+            #========================================
+            # Calling "password_handling" Function
+            #=======================================
         
-        time.sleep(0.5)
-        # Requirements
-        print("Password should contain atleast [1 - capital character] [1 - small character] [1 - special character] and more than [8 - characters ]")
-        #========================================
-        # Calling "password_handling" Function
-        #=======================================
-    
-        password_handling(user_name, webname, weburl)
-    elif initial_input == "2":
-        view()
-    
-    elif initial_input == "3":
-        #========================================
-        # Calling "Searching" Function
-        #=======================================
-        account_name =  input("Enter Website name: ")
-        data = searching(account_name)
-        # =======================
-        # Modifying print for UX 
-        # =======================
-        if data == "Credential does not exist.":
-            print("Wrong input")
-        else:
-            print(f"""
+            password_handling(user_name, webname, weburl)
+        elif initial_input == "2":
+            view()
+        
+        elif initial_input == "3":
+            #========================================
+            # Calling "Searching" Function
+            #=======================================
+            account_name =  input("Enter Website name: ")
+            data = searching(account_name)
+            # =======================
+            # Modifying print for UX 
+            # =======================
+            if data == "Credential does not exist.":
+                print(data)
+            else:
+                print(f"""
 ============================
         Search Results
 ============================
@@ -112,17 +129,24 @@ Username     : {data["Username"]}
 ----------------------------
 Password     : {data["Password"]}
 ----------------------------
-        """)
-    elif initial_input == "4":
-        #========================================================================================
-        #Calling "Searching" Function again to delete the data by reusing the searching function
-        #========================================================================================
-        account_delete = input("Name the Login you want to delete: ")
-        result = searching(account_delete)
-        if result == "Credential does not exist.":
-            print(result)
+            """)
+        elif initial_input == "4":
+            #========================================================================================
+            #Calling "Searching" Function again to delete the data by reusing the searching function
+            #========================================================================================
+            account_delete = input("Name the Login you want to delete: ")
+            result = searching(account_delete)
+            if result == "Credential does not exist.":
+                print(result)
+            else:
+                delete(result)
+        elif initial_input == "5":
+            print("Thank for coming!!")
+            break
+            
         else:
-            delete(result)
+            print("Invalid input")
+
 
 #======================
 # Website Name Feature
@@ -289,7 +313,7 @@ def delete(account_delete):
     print(f"Are you sure you want to delete: {account_delete}")
     delete_input = input("Enter [Y] - Yes or [N] - No: ") 
     for data in datas:
-        if not delete_input == "Y" or "N":
+        if  delete_input not in  ["Y" , "N"]:
             print("Wrong input")
             break
         if delete_input == "N":
@@ -301,6 +325,8 @@ def delete(account_delete):
                 with open("save.json","w") as file:
                     json.dump(datas,file,indent="\t")
                 print("Data was deleted successfully.")
+                break
+                
        
     
 if __name__ == "__main__":
