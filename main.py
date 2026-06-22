@@ -21,11 +21,27 @@ def main():
             pre_data = json.load(file)
     except(json.JSONDecodeError, FileNotFoundError):
         with open("master.json","w") as file:
-            print("You don't have existing password.")
-            add_password = input("Please add password: ")
+            print("""
+>> Status: NEW USER DETECTED
+=============================
+Initializing Password Manager 
+=============================
+""")
+            time.sleep(0.3)
+            print("""
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✦ Create a Master Password to secure
+  your vault and continue.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+""")
+            add_password = input("""
+Please add password: """)
             hash_password = {"master_hash":hashlib.sha256(add_password.encode()).hexdigest()}
             json.dump(hash_password,file)
-            print("Password saved successfully.")
+            print("""
+>> Status: Password saved successfully.
+""")
+            main_menu()
     else:     
         master_password()
 def master_password():
@@ -36,6 +52,12 @@ def master_password():
 Enter Master Password: 
 =======================
 =>""")
+        if login_password == "":
+            print("""
+>> Status: INPUT REQUIRED 
+Master Password cannot be empty.
+""")
+            continue
         hash_login = hashlib.sha256(login_password.encode()).hexdigest()
         with open("master.json","r") as file:
             data = json.load(file)
@@ -43,7 +65,10 @@ Enter Master Password:
         if hash_login == data["master_hash"]:
             main_menu()
             break
-        print("Incorrect Password. Try Again.")
+        print("""
+>> Status: ACCESS DENIED
+Incorrect Password. Try Again.
+""")
         attempt += 1
     else:
         print("Too many attempts.")
@@ -52,9 +77,9 @@ def main_menu():
     time.sleep(0.5)
     print(""" 
 >> Status: ACCESS GRANTED 
-╔═════════════════════════════════════════════════════════════════════╗
-║   W E L C O M E   T O   P A S S W O R D   M A N A G E R             ║
-╚═════════════════════════════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════════╗
+║   W E L C O M E   T O   P A S S W O R D   M A N A G E R   ║
+╚═══════════════════════════════════════════════════════════╝
 """)
     #===================
     # Select Operations
@@ -145,7 +170,7 @@ Password     : {data["Password"]}
             break
             
         else:
-            print("Invalid input")
+            print("\n>>Status: INVALID INPUT")
 
 
 #======================
@@ -279,10 +304,11 @@ def save_permanent(response, password, user_name, webname, weburl):
 #Viewing Saved Password
 #===========================================
 def view():
-    with open("save.json","r") as file:
-        datas = json.load(file)
-    for data in datas:
-        print(
+    try:
+        with open("save.json","r") as file:
+            datas = json.load(file)
+        for data in datas:
+            print(
 f"""
 {data["Website Name"]} :-
 ================================
@@ -291,42 +317,50 @@ URL     : {data["Website Url"]}
 Username : {data["Username"]}
 Password : {data["Password"]}
 ================================""")
+    except (json.JSONDecodeError, FileNotFoundError):
+        print("No saved credentials found.")
         
 
 #=====================================
 #Block used for searching the account
 #=====================================
 def searching(account_name):
-    with open("save.json","r") as file :
-        datas = json.load(file)
-    for data in datas:
-        if data["Website Name"].lower() == account_name.lower():
-            return(data)
-    else:
-        return("Credential does not exist.")
+    try:
+        with open("save.json","r") as file :
+            datas = json.load(file)
+        for data in datas:
+            if data["Website Name"].lower() == account_name.lower():
+                return(data)
+        else:
+            return("Credential does not exist.")
+    except(json.JSONDecodeError, FileNotFoundError):
+        return "No saved credentials found."
 #===========================================
 #Block used for deleting a particular Login 
 #===========================================
 def delete(account_delete):
-    with open("save.json","r") as file :
-        datas = json.load(file)
-    print(f"Are you sure you want to delete: {account_delete}")
-    delete_input = input("Enter [Y] - Yes or [N] - No: ") 
-    for data in datas:
-        if  delete_input not in  ["Y" , "N"]:
-            print("Wrong input")
-            break
-        if delete_input == "N":
-            print("Delete process was Terminated.")
-            break
-        if delete_input == "Y":
-            if data == account_delete:
-                datas.remove(account_delete)
-                with open("save.json","w") as file:
-                    json.dump(datas,file,indent="\t")
-                print("Data was deleted successfully.")
+    try:
+        with open("save.json","r") as file :
+            datas = json.load(file)
+        print(f"Are you sure you want to delete: {account_delete}")
+        delete_input = input("Enter [Y] - Yes or [N] - No: ") 
+        for data in datas:
+            if  delete_input not in  ["Y" , "N"]:
+                print("Wrong input")
                 break
-                
+            if delete_input == "N":
+                print("Delete process was Terminated.")
+                break
+            if delete_input == "Y":
+                if data == account_delete:
+                    datas.remove(account_delete)
+                    with open("save.json","w") as file:
+                        json.dump(datas,file,indent="\t")
+                    print("Data was deleted successfully.")
+                    break
+    except(json.JSONDecodeError, FileNotFoundError):
+        print("No saved credentials found.")
+                    
        
     
 if __name__ == "__main__":
