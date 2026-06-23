@@ -30,7 +30,7 @@ Initializing Password Manager
 """)
             time.sleep(0.3)
             print("""
->> ────────────────────────────────────────
+────────────────────────────────────────
 
 Create a Master Password to secure
 your vault and continue.
@@ -44,10 +44,7 @@ your vault and continue.
 Please add password: 
 ────────────────────                            
 >""")
-                print(f"""
-═════════════════                     
-⚠ Attempt {attempt_password} of 3
-═════════════════""")
+                
                 has_upper = False
                 has_lower = False
                 has_digit = False
@@ -69,10 +66,12 @@ Please add password:
 All validation checks passed successfully.
 
 ════════════════════════════════════════""")
-                    hash_password = {"master_hash":hashlib.sha256(add_password.encode()).hexdigest()}
+                    hash_password = {"master_hash":hashlib.sha256(add_password. encode()).hexdigest()}
                     json.dump(hash_password,file)
                     print("""
+════════════════════════════════════════
 >> Status: Password saved successfully.
+════════════════════════════════════════
 """)
                     main_menu()
                 else:
@@ -83,14 +82,13 @@ All validation checks passed successfully.
        VALIDATION FAILED        
 
 ++++++++++++++++++++++++++++++++
-
-Missing requirements:
-""",end="")
+      
+Missing requirements:""",end="")
                     if not len(add_password) >= 8:
                             print("""
 ++++++++++++++++++++++
 Password is too small.
-++++++++++++++++++++++                      """)
+++++++++++++++++++++++""")
                     if not has_upper :
                             print(
 """+++++++++++++++++++++++++++
@@ -113,6 +111,10 @@ Special Character is missing.
 +++++++++++++++++++++++++++++""")
                 attempt_password += 1
             else:
+                print(f"""
+═════════════════                     
+⚠ Attempt {attempt_password} of 3
+═════════════════""")
                 print("""
 ════════════════════════════════════════
 
@@ -236,6 +238,8 @@ Password should contain atleast [1 - capital character], [1 - small character],
             # =======================
             if data == "Credential does not exist.":
                 print(data)
+            elif data == "No saved credentials found.":
+                print(data)
             else:
                 print(f"""
 ============================
@@ -257,7 +261,9 @@ Password     : {data["Password"]}
             #========================================================================================
             account_delete = input("Name the Login you want to delete: ")
             result = searching(account_delete)
-            if result == "Credential does not exist.":
+            if result == """
+
+⚠ Credential does not exist.""":
                 print(result)
             else:
                 delete(result)
@@ -296,10 +302,6 @@ def password_handling(user_name, webname, weburl):
     # Loop for mismatched password until it matches.
     attempt_password = 0
     while attempt_password < 3:
-        print("""
-═════════════════                    
-⚠ Attempt {attempt_password} of 3
-═════════════════""")
         password = input("Enter Password: ")
         has_upper = False
         has_lower = False
@@ -314,7 +316,7 @@ def password_handling(user_name, webname, weburl):
                 has_digit = True
             elif not char.isalnum():
                 has_special = True
-        if len(password)>= 8 and has_upper and has_lower and has_special and has_digit == True:
+        if len(password)>= 8 and has_upper and has_lower and has_special and has_digit:
             print("""
 >> Status: CREATED STRONG PASSWORD
 All validation checks passed successfully.""")
@@ -337,6 +339,10 @@ All validation checks passed successfully.""")
                 print("Password Confirmation failed")
             break
         else:
+            print(f"""
+═════════════════                    
+⚠ Attempt {attempt_password} of 3
+═════════════════""")
             print(
 """
 ++++++++++++++++++++++++++++++++++++++++
@@ -468,8 +474,6 @@ def delete(account_delete):
                     break
     except(json.JSONDecodeError, FileNotFoundError):
         print("No saved credentials found.")
-                    
-       
-    
+                
 if __name__ == "__main__":
     main()
