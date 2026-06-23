@@ -15,6 +15,7 @@ print("""
 ██║ ╚═╝ ██║██║  ██║██║ ╚████║██║  ██║╚██████╔╝███████╗██║  ██║
 ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝
 """)
+time.sleep(0.3)
 def main():
     try:
         with open("master.json","r") as file:
@@ -23,25 +24,103 @@ def main():
         with open("master.json","w") as file:
             print("""
 >> Status: NEW USER DETECTED
-=============================
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Initializing Password Manager 
-=============================
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """)
             time.sleep(0.3)
             print("""
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✦ Create a Master Password to secure
-  your vault and continue.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+>> ────────────────────────────────────────
+
+Create a Master Password to secure
+your vault and continue.
+
+────────────────────────────────────────
 """)
-            add_password = input("""
-Please add password: """)
-            hash_password = {"master_hash":hashlib.sha256(add_password.encode()).hexdigest()}
-            json.dump(hash_password,file)
-            print("""
+            attempt_password = 1
+            while attempt_password < 4:
+                add_password = input("""
+────────────────────
+Please add password: 
+────────────────────                            
+>""")
+                print(f"""
+═════════════════                     
+⚠ Attempt {attempt_password} of 3
+═════════════════""")
+                has_upper = False
+                has_lower = False
+                has_digit = False
+                has_special = False
+                for char in add_password:
+                    if char.isupper():
+                        has_upper = True
+                    elif char.islower():
+                        has_lower = True
+                    elif char.isdigit():
+                        has_digit = True
+                    elif not char.isalnum():
+                        has_special = True
+                if len(add_password)>= 8 and has_upper and has_lower and has_special and has_digit:
+                    print("""
+════════════════════════════════════════
+
+>> Status: VALID PASSWORD 
+All validation checks passed successfully.
+
+════════════════════════════════════════""")
+                    hash_password = {"master_hash":hashlib.sha256(add_password.encode()).hexdigest()}
+                    json.dump(hash_password,file)
+                    print("""
 >> Status: Password saved successfully.
 """)
-            main_menu()
+                    main_menu()
+                else:
+                    print(
+"""
+++++++++++++++++++++++++++++++++
+
+       VALIDATION FAILED        
+
+++++++++++++++++++++++++++++++++
+
+Missing requirements:
+""",end="")
+                    if not len(add_password) >= 8:
+                            print("""
+++++++++++++++++++++++
+Password is too small.
+++++++++++++++++++++++                      """)
+                    if not has_upper :
+                            print(
+"""+++++++++++++++++++++++++++
+Uppercase letter is missing
++++++++++++++++++++++++++++""") 
+                    if not has_lower :
+                            print(
+"""+++++++++++++++++
+Lower is missing.
++++++++++++++++++""")
+                    if not has_digit :
+                            print(
+"""++++++++++++++++++++
+Digits are missing.
+++++++++++++++++++++""")
+                    if not has_special:
+                            print(
+"""+++++++++++++++++++++++++++++
+Special Character is missing.
++++++++++++++++++++++++++++++""")
+                attempt_password += 1
+            else:
+                print("""
+════════════════════════════════════════
+
+>> Status: ATTEMPT LIMIT EXCEEDED
+
+Maximum number of attempts reached.
+
+════════════════════════════════════════""")
     else:     
         master_password()
 def master_password():
@@ -109,18 +188,35 @@ Type 1, 2, 3, 4, or 5 :
         #===========================
         if initial_input == "1":
             #Website Name
-            webname = input("Enter Website's Name: ")
+            webname = input("""
+═════════════════════
+Enter Website's Name: 
+═════════════════════
+>""")
             website_namehandling(webname)
             #Website Url
-            weburl = input("Enter Wesites Url: ")
+            weburl = input("""
+══════════════════
+Enter Wesites Url: 
+══════════════════
+>""")
             website_urlhandling(weburl)
             #Calling "username" Function 
-            user_name = input("Enter Username: ")
+            user_name = input("""
+═══════════════
+Enter Username: 
+═══════════════
+>""")
             print(username_handling(user_name))
             
             time.sleep(0.5)
             # Requirements
-            print("Password should contain atleast [1 - capital character] [1 - small character] [1 - special character] and more than [8 - characters ]")
+            print("""
+================================================================================
+Password should contain atleast [1 - capital character], [1 - small character],
+[1 - special character] and more than [8 - characters ].
+================================================================================      
+""")
             #========================================
             # Calling "password_handling" Function
             #=======================================
@@ -200,7 +296,10 @@ def password_handling(user_name, webname, weburl):
     # Loop for mismatched password until it matches.
     attempt_password = 0
     while attempt_password < 3:
-        print("Attempt No:",attempt_password)
+        print("""
+═════════════════                    
+⚠ Attempt {attempt_password} of 3
+═════════════════""")
         password = input("Enter Password: ")
         has_upper = False
         has_lower = False
@@ -216,7 +315,9 @@ def password_handling(user_name, webname, weburl):
             elif not char.isalnum():
                 has_special = True
         if len(password)>= 8 and has_upper and has_lower and has_special and has_digit == True:
-            print("Your password is Valid.")
+            print("""
+>> Status: CREATED STRONG PASSWORD
+All validation checks passed successfully.""")
             attempt = 0
             while attempt < 3:
                 re_enter = input("Re-enter Password: ")   
@@ -229,7 +330,8 @@ def password_handling(user_name, webname, weburl):
                     response = input("Enter [Y] - Yes or [N] - No: ")
                     save_permanent(response,password, user_name, webname, weburl)
                     break
-                print("Password mismatched please re-enter.")
+                print("""
+>> Status: PASSWORD MISMATCHED""")
                 attempt += 1
             else:
                 print("Password Confirmation failed")
@@ -237,24 +339,24 @@ def password_handling(user_name, webname, weburl):
         else:
             print(
 """
-==============================
-==============================
-Following things are missing:
-==============================
-==============================
+++++++++++++++++++++++++++++++++++++++++
+
+       VALIDATION FAILED
+
+++++++++++++++++++++++++++++++++++++++++
+
+Missing requirements:
 """)
             if not len(password) >= 8:
                 print("""
 ++++++++++++++++++++++
 Password is too small.
-++++++++++++++++++++++                      
-                      """)
+++++++++++++++++++++++""")
             if not has_upper :
                 print("""
 +++++++++++++++++++++++++++
 Uppercase letter is missing
-+++++++++++++++++++++++++++                      
-""") 
++++++++++++++++++++++++++++""") 
             if not has_lower :
                 print("""
 +++++++++++++++++
@@ -269,11 +371,17 @@ Digits are missing.
                 print("""
 +++++++++++++++++++++++++++++
 Special Character is missing.
-+++++++++++++++++++++++++++++
-                      """)
++++++++++++++++++++++++++++++""")
         attempt_password += 1
     else:
-        print("Number of attempts Exceeded")
+        print("""
+════════════════════════════════════════
+
+>> Status: ATTEMPT LIMIT EXCEEDED
+
+Maximum number of attempts reached.
+
+════════════════════════════════════════""")
         
 #===========================================
 #Json File Handling 
