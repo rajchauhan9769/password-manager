@@ -202,38 +202,41 @@ Type 1, 2, 3, 4, or 5 :
         #===========================
         if initial_input == "1":
             #Website Name
-            webname = input("""
+            while True:
+                webname = input("""
 ═════════════════════
 Enter Website's Name: 
 ═════════════════════
 >""")
-            if not website_namehandling(webname):
-                continue
+                if website_namehandling(webname):
+                    break
 # ======================================================================================
               
             # ===========
             # Website Url
             # ============
-            weburl = input("""
+            while True:
+                weburl = input("""
 ══════════════════
 Enter Wesites Url: 
 ══════════════════
 >""")           
-            if not website_urlhandling(weburl): 
-                    continue
+                if website_urlhandling(weburl): 
+                    break
             
 
 # =======================================================================================
             # ===========================
             # Calling "username" Function 
             # ===========================
-            user_name = input("""
+            while True:
+                user_name = input("""
 ═══════════════
 Enter Username: 
 ═══════════════
 >""")
-            if not username_handling(user_name):
-                continue
+                if username_handling(user_name):
+                    break
             
             time.sleep(0.5)
 # =======================================================================================
