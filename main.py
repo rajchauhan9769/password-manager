@@ -461,28 +461,26 @@ def save_permanent(password, user_name, webname, weburl):
         if response in ["Y","N"]:
             break
         print("Invalid Input")
-    while True:
-        if response == "Y":
-            try:
-                with open("save.json","r") as file:
-                    existing_data = json.load(file)
-            except (json.JSONDecodeError, FileNotFoundError):
-                        existing_data = []
-            existing_data.append({
-            "Website Name": webname,
-            "Website Url": weburl,
-            "Username": user_name,
-            "Password": password,
-                })
-            with open("save.json","w") as file:
-                json.dump(existing_data,file,indent="\t")
-            print("Password Saved Successfully!!")
-            break
-        elif response == "N":
-            print("Your Password is Terminated")
-            break
-        else:
-            print("Invalid Input")
+    
+    if response == "Y":
+        try:
+            with open("save.json","r") as file:
+                existing_data = json.load(file)
+        except (json.JSONDecodeError, FileNotFoundError):
+                    existing_data = []
+        existing_data.append({
+        "Website Name": webname,
+        "Website Url": weburl,
+        "Username": user_name,
+        "Password": password,
+            })
+        with open("save.json","w") as file:
+            json.dump(existing_data,file,indent="\t")
+        print("Password Saved Successfully!!")
+    else:
+        print("Your Password is Terminated")
+        
+   
 
 
 #===========================================
