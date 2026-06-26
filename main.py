@@ -291,14 +291,7 @@ Password     : {data["Password"]}
             #========================================================================================
             #Calling "Searching" Function again to delete the data by reusing the searching function
             #========================================================================================
-            account_delete = input("Name the Login you want to delete: ")
-            result = searching(account_delete)
-            if result == """
-
-⚠ Credential does not exist.""":
-                print(result)
-            else:
-                delete(result)
+            delete()
         elif initial_input == "5":
             print("""
 
@@ -395,10 +388,9 @@ Re-enter Password:
                     print("Password Added Successfully.")
                     time.sleep(0.5)
                     #Save Password
-                    print("Do you want to save your password.")
-                    # Creating "save" Function and confirming to save or not.
-                    response = input("Enter [Y] - Yes or [N] - No: ")
-                    save_permanent(response,password, user_name, webname, weburl)
+                    
+                        
+                    save_permanent(password, user_name, webname, weburl)
                     break
                 print("""
 >> Status: PASSWORD MISMATCHED""")
@@ -461,26 +453,36 @@ Maximum number of attempts reached.
 #Json File Handling 
 #Permanent saving of Logins in Json.
 #===========================================
-def save_permanent(response, password, user_name, webname, weburl):
-    if response == "Y":
-        try:
-            with open("save.json","r") as file:
-                existing_data = json.load(file)
-        except (json.JSONDecodeError, FileNotFoundError):
-                    existing_data = []
-        existing_data.append({
-        "Website Name": webname,
-        "Website Url": weburl,
-        "Username": user_name,
-        "Password": password,
-            })
-        with open("save.json","w") as file:
-            json.dump(existing_data,file,indent="\t")
-        print("Password Saved Successfully!!")
-    elif response == "N":
-        print("Your Password is Terminated")
-    else:
+def save_permanent(password, user_name, webname, weburl):
+    print("Do you want to save your password.")
+    # Creating "save" Function and confirming to save or not.
+    while True:
+        response = input("Enter [Y] - Yes or [N] - No: ").upper()
+        if response in ["Y","N"]:
+            break
         print("Invalid Input")
+    while True:
+        if response == "Y":
+            try:
+                with open("save.json","r") as file:
+                    existing_data = json.load(file)
+            except (json.JSONDecodeError, FileNotFoundError):
+                        existing_data = []
+            existing_data.append({
+            "Website Name": webname,
+            "Website Url": weburl,
+            "Username": user_name,
+            "Password": password,
+                })
+            with open("save.json","w") as file:
+                json.dump(existing_data,file,indent="\t")
+            print("Password Saved Successfully!!")
+            break
+        elif response == "N":
+            print("Your Password is Terminated")
+            break
+        else:
+            print("Invalid Input")
 
 
 #===========================================
@@ -521,33 +523,49 @@ def searching(account_name):
 #===========================================
 #Block used for deleting a particular Login 
 #===========================================
-def delete(account_delete):
-    try:
-        with open("save.json","r") as file :
-            datas = json.load(file)
-        print("""
-────────────────────────────────────────
-DELETE CONFIRMATION
-────────────────────────────────────────
-""")
-        print(f"Selected Account: {account_delete}")
-        delete_input = input("Enter [Y] - Yes or [N] - No: ") 
-        if delete_input not in  ["Y" , "N"]:
-                print("Wrong input")
-                return
-        if delete_input == "N":
-            print("Delete process was Terminated.")
-            return
-        for data in datas:
-            if delete_input == "Y":
-                if data == account_delete:
-                    datas.remove(account_delete)
-                    with open("save.json","w") as file:
-                        json.dump(datas,file,indent="\t")
-                    print("Data was deleted successfully.")
-                    return
-    except(json.JSONDecodeError, FileNotFoundError):
-        print("No saved credentials found.")
+def delete():
+        account_delete = input("Name the Login you want to delete: ")
+        result = searching(account_delete)
+        if result == """
+⚠ Credential does not exist.""":
+            print(result)       
+        else:
+                try:
+                    with open("save.json","r") as file :
+                        datas = json.load(file)
+                    print("""
+            ────────────────────────────────────────
+                      DELETE CONFIRMATION
+            ────────────────────────────────────────
+            """)
+                    print(f"""Selected Account:- 
+{result["Website Name"]} :-
+════════════════════════════════
+Website  : {result["Website Name"]}
+URL     : {result["Website Url"]}
+Username : {result["Username"]}
+Password : {result["Password"]}
+════════════════════════════════""")
+                    
+                    while True:
+                            delete_input = input("Enter [Y] - Yes or [N] - No: ") 
+                            if delete_input not in  ["Y" , "N"]:
+                                    print("Wrong input")
+                            elif delete_input == "N":
+                                print("Delete process was Terminated.")
+                                break
+                            else:
+                                if delete_input == "Y":
+                                    for data in datas:
+                                        if data == result:
+                                            datas.remove(result)
+                                            with open("save.json","w") as file:
+                                                json.dump(datas,file,indent="\t")
+                                            print("Data was deleted successfully.")
+                                break
+                            
+                except(json.JSONDecodeError, FileNotFoundError):
+                    print("No saved credentials found.")
                 
 if __name__ == "__main__":
     main()
