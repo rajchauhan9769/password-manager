@@ -19,7 +19,7 @@ time.sleep(0.3)
 def main():
     try:
         with open("master.json","r") as file:
-            pre_data = json.load(file)
+            json.load(file)
     except(json.JSONDecodeError, FileNotFoundError):
         with open("master.json","w") as file:
             print("""
@@ -195,7 +195,7 @@ def main_menu():
 ────────────────────────
 Type 1, 2, 3, 4, or 5 : 
 ────────────────────────
-=>""")
+=>""").strip()
 # ===================================================================================
         #===========================
         #Option Selection Condition
@@ -207,7 +207,7 @@ Type 1, 2, 3, 4, or 5 :
 ═════════════════════
 Enter Website's Name: 
 ═════════════════════
->""")
+>""").strip()
                 if website_namehandling(webname):
                     break
 # ======================================================================================
@@ -218,9 +218,9 @@ Enter Website's Name:
             while True:
                 weburl = input("""
 ══════════════════
-Enter Wesites Url: 
+Enter Wesites URL: 
 ══════════════════
->""")           
+>""").strip()           
                 if website_urlhandling(weburl): 
                     break
             
@@ -234,7 +234,7 @@ Enter Wesites Url:
 ═══════════════
 Enter Username: 
 ═══════════════
->""")
+>""").strip()
                 if username_handling(user_name):
                     break
             
@@ -263,7 +263,7 @@ Password Requirements:
             #========================================
             # Calling "Searching" Function
             #=======================================
-            account_name =  input("Enter Website name: ")
+            account_name =  input("Enter Website name: ").strip()
             data = searching(account_name)
             # =======================
             # Modifying print for UX 
@@ -280,7 +280,7 @@ Password Requirements:
 ────────────────────────────                         
 Website Name : {data["Website Name"]}
 ────────────────────────────
-Website Url  : {data["Website Url"]}
+Website URL  : {data["Website URL"]}
 ────────────────────────────
 Username     : {data["Username"]}
 ────────────────────────────
@@ -322,7 +322,7 @@ Please select a valid option.
 # Website Name Feature
 #======================
 def website_namehandling(webname):
-        if webname.strip() == "":
+        if webname == "":
             print("Website name cannot be empty.")
             return False
         return True 
@@ -332,7 +332,7 @@ def website_namehandling(webname):
 #============================
 def website_urlhandling(weburl):       #**** Website Url Validation upcoming ****
         if "." not in weburl:
-            print("Not a Valid url")
+            print("Not a Valid URL")
             return False
         return True
 
@@ -383,7 +383,7 @@ All validation checks passed successfully.""")
 ────────────────────
 Re-enter Password:
 ────────────────────
->""")   
+>""")  
                 if password == re_enter:
                     print("Password Added Successfully.")
                     time.sleep(0.5)
@@ -457,7 +457,7 @@ def save_permanent(password, user_name, webname, weburl):
     print("Do you want to save your password.")
     # Creating "save" Function and confirming to save or not.
     while True:
-        response = input("Enter [Y] - Yes or [N] - No: ").upper()
+        response = input("Enter [Y] - Yes or [N] - No: ").upper().strip()
         if response in ["Y","N"]:
             break
         print("Invalid Input")
@@ -470,7 +470,7 @@ def save_permanent(password, user_name, webname, weburl):
                     existing_data = []
         existing_data.append({
         "Website Name": webname,
-        "Website Url": weburl,
+        "Website URL": weburl,
         "Username": user_name,
         "Password": password,
             })
@@ -496,7 +496,7 @@ f"""
 {data["Website Name"]} :-
 ════════════════════════════════
 Website  : {data["Website Name"]}
-URL     : {data["Website Url"]}
+URL     : {data["Website URL"]}
 Username : {data["Username"]}
 Password : {data["Password"]}
 ════════════════════════════════""")
@@ -522,10 +522,9 @@ def searching(account_name):
 #Block used for deleting a particular Login 
 #===========================================
 def delete():
-        account_delete = input("Name the Login you want to delete: ")
+        account_delete = input("Name the Login you want to delete: ").strip()
         result = searching(account_delete)
-        if result == """
-⚠ Credential does not exist.""":
+        if result == "Credential does not exist.":
             print(result)       
         else:
                 try:
@@ -540,13 +539,13 @@ def delete():
 {result["Website Name"]} :-
 ════════════════════════════════
 Website  : {result["Website Name"]}
-URL     : {result["Website Url"]}
+URL     : {result["Website URL"]}
 Username : {result["Username"]}
 Password : {result["Password"]}
 ════════════════════════════════""")
                     
                     while True:
-                            delete_input = input("Enter [Y] - Yes or [N] - No: ") 
+                            delete_input = input("Enter [Y] - Yes or [N] - No: ").upper().strip() 
                             if delete_input not in  ["Y" , "N"]:
                                     print("Wrong input")
                             elif delete_input == "N":
