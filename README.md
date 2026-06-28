@@ -22,5 +22,7 @@ This file consist various test on function level. Trying to test edge cases and 
 ### JSON instead of CSV
 JSON was used instead of CSV. This design choice was made cause CSV stores data in tabular form, making it easy for table. However, JSON stores data as an object with name field such as Website Name, Website URL, Username, and Password (used in this program). JSON integrates with dictionary easily which further allows use of keys and value for searching, modifying, viewing etc.
 ### Hashing
-Next useful design choice we made was using <ins>**haslib**</ins> library
+Next useful design choice i made was using <ins>**haslib**</ins> library. This helped creation of master password and encoding it to hash and saving it in JSON. Making it safe from other non-owner/unofficial user to see paritcular user's password and restricting access.
+### Validation
+Input Validation was also implemented. To Validate user's input and to restrict invalid input  
 
