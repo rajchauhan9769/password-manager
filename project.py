@@ -37,23 +37,23 @@ your vault and continue.
 
 ────────────────────────────────────────
 """)              
-            print("""
-────────────────────────────────────────
+            
+            attempt_password = 0
+            while attempt_password <= 3:
+                add_password = input("""
+───────────────────────
 Password Requirements:
 • 8+ characters
 • Uppercase letter
 • Lowercase letter
 • Digit
 • Special character
-──────────────────────────────────────── """)
-            attempt_password = 1
-            while attempt_password <= 3:
-                add_password = input("""
-────────────────────
+───────────────────────
+───────────────────────
 Please add password: 
-────────────────────                            
->""")
-                
+───────────────────────                            
+>""")           
+                attempt_password += 1
                 has_upper = False
                 has_lower = False
                 has_digit = False
@@ -119,8 +119,8 @@ Digits are missing.
 """+++++++++++++++++++++++++++++
 Special Character is missing.
 +++++++++++++++++++++++++++++""")
-                attempt_password += 1
             else:
+                
                 print(f"""
 ═════════════════                     
 ⚠ Attempt {attempt_password} of 3
@@ -148,6 +148,7 @@ Enter Master Password:
 >> Status: INPUT REQUIRED 
 Master Password cannot be empty.
 """)
+            attempt += 1
             continue
         hash_login = hashlib.sha256(login_password.encode()).hexdigest()
         with open("master.json","r") as file:
@@ -160,7 +161,7 @@ Master Password cannot be empty.
 >> Status: ACCESS DENIED
 Incorrect Password. Try Again.
 """)
-        attempt += 1
+        
     else:
         print("Too many attempts.")
 def main_menu():
@@ -325,6 +326,9 @@ def website_namehandling(webname):
         if webname == "":
             print("Website name cannot be empty.")
             return False
+        if not any(char.isalpha() for char in webname):
+            print("Website name must contain at least one letter.")
+            return False
         return True 
 
 #============================
@@ -333,6 +337,9 @@ def website_namehandling(webname):
 def website_urlhandling(weburl):       #**** Website Url Validation upcoming ****
         if "." not in weburl:
             print("Not a Valid URL")
+            return False
+        if not any(char.isalpha() for char in weburl):
+            print("Url must contain at least one letter.")
             return False
         return True
 
@@ -344,6 +351,9 @@ def website_urlhandling(weburl):       #**** Website Url Validation upcoming ***
 def username_handling(user_name):               #****Username Validation upcoming.****
         if user_name.strip() == "":
             print("Username cannot be empty.")
+            return False
+        if not any(char.isalpha() for char in user_name):
+            print("Username name must contain at least one letter.")
             return False
         return True
 
@@ -536,7 +546,7 @@ def delete():
             ────────────────────────────────────────
             """)
                     print(f"""Selected Account:- 
-{result["Website Name"]} :-
+{result["Website Name"]}
 ════════════════════════════════
 Website  : {result["Website Name"]}
 URL     : {result["Website URL"]}
