@@ -39,7 +39,7 @@ your vault and continue.
 """)              
             
             attempt_password = 0
-            while attempt_password <= 3:
+            while attempt_password < 3:
                 add_password = input("""
 ───────────────────────
 Password Requirements:
@@ -120,7 +120,6 @@ Digits are missing.
 Special Character is missing.
 +++++++++++++++++++++++++++++""")
             else:
-                
                 print(f"""
 ═════════════════                     
 ⚠ Attempt {attempt_password} of 3
@@ -161,7 +160,7 @@ Master Password cannot be empty.
 >> Status: ACCESS DENIED
 Incorrect Password. Try Again.
 """)
-        
+        attempt += 1
     else:
         print("Too many attempts.")
 def main_menu():
