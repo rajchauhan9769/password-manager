@@ -20,7 +20,6 @@ def main():
         with open("master.json","r") as file:
             json.load(file)
     except(json.JSONDecodeError, FileNotFoundError):
-        with open("master.json","w") as file:
             print("""
 >> Status: NEW USER DETECTED
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -49,7 +48,7 @@ Password Requirements:
 • Special character
 ───────────────────────
 ───────────────────────
-Please add password: 
+Please create password: 
 ───────────────────────                            
 >""")           
                 attempt_password += 1
@@ -74,8 +73,23 @@ Please add password:
 All validation checks passed successfully.
 
 ════════════════════════════════════════""")
-                    hash_password = {"master_hash":hashlib.sha256(add_password. encode()).hexdigest()}
-                    json.dump(hash_password,file)
+                    repass = input("""
+───────────────────
+Re-enter password: 
+───────────────────
+>""")
+                    if add_password == repass: 
+                        hash_password = {"master_hash":hashlib.sha256(add_password. encode()).hexdigest()}
+                    else:
+                        print("""
+───────────────────────────
+>> Status: ACCESS DENIED
+   Password Mismatched.
+───────────────────────────
+""")
+                        break
+                    with open("master.json","w") as file:
+                        json.dump(hash_password,file)
                     print("""
 ════════════════════════════
 >> Status: PASSWORD SAVED
